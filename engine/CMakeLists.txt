@@ -8,7 +8,7 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-std=c++23" COMPILER_SUPPORTS_CXX23)
 if (NOT COMPILER_SUPPORTS_CXX23)
     message(FATAL_ERROR "The compiler does not support C++23.")
-endif()
+endif ()
 
 file(GLOB engine-sources src/*.cpp)
 file(GLOB engine-headers include/engine/*.hpp)
@@ -31,3 +31,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE glad glfw assimp ${ASSIMP_LIBRARIE
         PUBLIC glm::glm-header-only spdlog::spdlog imgui json)
 
 prebuild_check(${PROJECT_NAME})
+
+#add_executable(test-app engine/test/app/test-app.cpp)
