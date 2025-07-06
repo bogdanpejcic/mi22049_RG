@@ -14,6 +14,9 @@ namespace app {
         std::string_view name() const override {
             return "app::MainController";
         };
+
+    private:
+        bool loop() override;
     };
 } // app
 
