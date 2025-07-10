@@ -16,6 +16,14 @@ namespace app {
         };
 
     private:
+        void begin_draw() override; //happens before draw
+
+        void draw_airplane();
+
+        void draw() override;
+
+        void end_draw() override; //happens after draw
+
         bool loop() override;
     };
 } // app
