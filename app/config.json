@@ -1,6 +1,9 @@
 {
   "resources": {
     "models": {
+      "Airplane": {
+        "path": "airplane/Harrier.obj"
+      }
     }
   },
   "window": {
