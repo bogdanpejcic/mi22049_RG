@@ -5,8 +5,10 @@
 
 ## Controls
 
-{BUTTON1} -> {ACTION1}  
-{BUTTON2} -> {ACTION2}  
+W -> Camera moves FORWARD  
+A -> Camera moves LEFT
+S -> Camera moves BACKWORD
+D -> Camera moves RIGHT
 ...  
 {BUTTONN} -> {ACTIONN}
 
@@ -26,6 +28,7 @@
 [ ] Parallax Mapping
 
 ### Group B:
+
 [ ] Bloom with the use of HDR  
 [ ] Deferred Shading  
 [ ] Point Shadows  

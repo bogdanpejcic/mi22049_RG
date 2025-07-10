@@ -20,7 +20,11 @@ namespace app {
 
         void draw_airplane();
 
+        void update_camera();
+
         void draw() override;
+
+        void update() override;
 
         void end_draw() override; //happens after draw
 
