@@ -22,6 +22,8 @@ namespace app {
 
         void update_camera();
 
+        void draw_skybox();
+
         void draw() override;
 
         void update() override;

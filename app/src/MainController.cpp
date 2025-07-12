@@ -77,8 +77,17 @@ namespace app {
         }
     }
 
+    void MainController::draw_skybox() {
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto skybox = resources->skybox("clouds");
+        auto shader = resources->shader("skybox");
+        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+        graphics->draw_skybox(shader, skybox);
+    }
+
     void MainController::draw() {
         draw_airplane();
+        draw_skybox();
     }
 
     void MainController::update() {
