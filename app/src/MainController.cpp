@@ -75,6 +75,18 @@ namespace app {
         if (platform->key(engine::platform::KeyId::KEY_D).is_down()) {
             camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt);
         }
+        if (platform->key(engine::platform::KeyId::KEY_RIGHT).is_down()) {
+            camera->rotate_camera(10.0f, 0.0f, true);
+        }
+        if (platform->key(engine::platform::KeyId::KEY_LEFT).is_down()) {
+            camera->rotate_camera(-10.0f, 0.0f, true);
+        }
+        if (platform->key(engine::platform::KeyId::KEY_UP).is_down()) {
+            camera->rotate_camera(0.0f, 10.0f, true);
+        }
+        if (platform->key(engine::platform::KeyId::KEY_DOWN).is_down()) {
+            camera->rotate_camera(-0.0f, -10.0f, true);
+        }
     }
 
     void MainController::draw_skybox() {

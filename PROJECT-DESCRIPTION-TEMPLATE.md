@@ -1,14 +1,21 @@
 # {NAME-OF-THE-PROJECT}
 
-{INDEX} - {STUDENT-FULL-NAME}  
+49/2022 - Bogdan Pejčić
 {PROJECT DESCRIPTION}
 
 ## Controls
 
-W -> Camera moves FORWARD  
-A -> Camera moves LEFT
-S -> Camera moves BACKWORD
-D -> Camera moves RIGHT
+W -> Camera moves forward  
+A -> Camera moves left
+S -> Camera moves backword
+D -> Camera moves right
+
+KEY_UP -> Camera turns up
+KEY_DOWN -> Camera turns down
+KEY_LEFT -> Camera turns left
+KEY_RIGHT -> Camera turns right
+
+ESC -> Terminate
 ...  
 {BUTTONN} -> {ACTIONN}
 
