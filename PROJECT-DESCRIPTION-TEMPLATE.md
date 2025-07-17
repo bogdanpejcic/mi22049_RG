@@ -54,9 +54,13 @@ ESC -> Terminate
 [link1]   
 [link2]
 
-## Textures
+## Textures:
 
 [link1]  
 [link2]
+
+## Skyboxes:
+
+https://opengameart.org/content/cloudy-skyboxes-0
 
 {OTHER-RESOURCES}

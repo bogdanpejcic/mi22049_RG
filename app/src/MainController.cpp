@@ -3,13 +3,13 @@
 //
 
 #include "../include/MainController.hpp"
-
 #include "GuiController.hpp"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
 #include "engine/resources/ResourcesController.hpp"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/bundled/compile.h"
 
 namespace app {
     class MainPlatformEventObserver : public engine::platform::PlatformEventObserver {
@@ -64,6 +64,7 @@ namespace app {
         if (day) {
             //Shader
             engine::resources::Shader *shaderDir = resources->shader("directional_light");
+
             day_and_night(shaderDir, graphics);
 
             shaderDir->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
@@ -80,6 +81,7 @@ namespace app {
         } else {
             //Shader
             engine::resources::Shader *shaderSpot = resources->shader("spot_light");
+
             day_and_night(shaderSpot, graphics);
 
             shaderSpot->set_vec3("light.position", graphics->camera()->Position);
@@ -134,9 +136,14 @@ namespace app {
         }
     }
 
-    void MainController::draw_skybox() {
+    void MainController::draw_skybox(bool day) {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto skybox = resources->skybox("clouds");
+        auto skybox = resources->skybox("day");
+        if (day) {
+            skybox = resources->skybox("day");
+        } else {
+            skybox = resources->skybox("night");
+        }
         auto shader = resources->shader("skybox");
         auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
         graphics->draw_skybox(shader, skybox);
@@ -150,7 +157,7 @@ namespace app {
             day = !day;
         }
         draw_airplane(day);
-        draw_skybox();
+        draw_skybox(day);
     }
 
     void MainController::update() {

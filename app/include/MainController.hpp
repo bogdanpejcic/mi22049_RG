@@ -27,7 +27,7 @@ namespace app {
 
         void update_camera();
 
-        void draw_skybox();
+        void draw_skybox(bool day);
 
         void draw() override;
 
