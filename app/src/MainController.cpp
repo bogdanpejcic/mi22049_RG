@@ -136,6 +136,15 @@ namespace app {
         }
     }
 
+    bool day = true;
+
+    void MainController::poll_events() {
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        if (platform->key(engine::platform::KEY_F3).state() == engine::platform::Key::State::JustPressed) {
+            day = !day;
+        }
+    }
+
     void MainController::draw_skybox(bool day) {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto skybox = resources->skybox("day");
@@ -149,13 +158,7 @@ namespace app {
         graphics->draw_skybox(shader, skybox);
     }
 
-    bool day = true;
-
     void MainController::draw() {
-        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        if (platform->key(engine::platform::KEY_F3).state() == engine::platform::Key::State::JustPressed) {
-            day = !day;
-        }
         draw_airplane(day);
         draw_skybox(day);
     }
