@@ -25,12 +25,19 @@ namespace app {
         }
     }
 
+    bool day;
+
     void MainController::initialize() {
         spdlog::info("MainController initialized");
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
         platform->set_enable_cursor(false); //cursor disappears
+        day = true;
+    }
+
+    bool MainController::get_day() {
+        return day;
     }
 
     void MainController::begin_draw() {

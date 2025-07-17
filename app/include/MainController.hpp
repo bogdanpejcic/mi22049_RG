@@ -16,7 +16,9 @@ namespace app {
     public:
         std::string_view name() const override {
             return "app::MainController";
-        };
+        }
+
+        static bool get_day();;
 
     private:
         void begin_draw() override; //happens before draw
