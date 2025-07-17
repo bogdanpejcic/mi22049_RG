@@ -49,7 +49,6 @@ namespace app {
         if (g_LargeFont)
             ImGui::PushFont(g_LargeFont);
 
-        ImGui::Begin("Camera info");
         ImGui::Text("Camera position: (%f, %f, %f)", camera->Position.x, camera->Position.y, camera->Position.z);
         ImGui::Text("(Yaw, Pitch): (%f, %f)", camera->Yaw, camera->Pitch);
         ImGui::Text("Camera front: (%f, %f, %f)", camera->Front.x, camera->Front.y, camera->Front.z);

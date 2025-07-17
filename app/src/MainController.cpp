@@ -143,8 +143,6 @@ namespace app {
         }
     }
 
-    bool day = true;
-
     void MainController::poll_events() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KEY_F3).state() == engine::platform::Key::State::JustPressed) {
