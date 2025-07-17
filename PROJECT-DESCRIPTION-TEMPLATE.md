@@ -1,9 +1,13 @@
 # {NAME-OF-THE-PROJECT}
 
 49/2022 - Bogdan Pejčić
-{PROJECT DESCRIPTION}
+Airplane is flying in daytime conditions. After pressing F3 on the keyboard,
+the scene changes to night, along with the lighting, which switches from directional to spot.
 
 ## Controls
+
+F2 -> Opens GUI
+F3 -> Changes scene from day to night and changes lighting
 
 W -> Camera moves forward  
 A -> Camera moves left

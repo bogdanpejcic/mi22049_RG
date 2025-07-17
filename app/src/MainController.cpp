@@ -38,17 +38,12 @@ namespace app {
         engine::graphics::OpenGL::clear_buffers();
     }
 
-    void MainController::draw_airplane() {
-        //Model
-        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-        engine::resources::Model *airplane = resources->model("Airplane"); //taken from congig.json
-        //Shader
-        engine::resources::Shader *shader = resources->shader("directional_light");
-
+    void MainController::day_and_night(engine::resources::Shader *shader,
+                                       engine::graphics::GraphicsController *graphics) {
         shader->use();
         shader->set_int("material.diffuse", 0);
         shader->set_int("material.specular", 1);
+
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
 
@@ -57,18 +52,54 @@ namespace app {
         model = glm::scale(model, glm::vec3(0.3f));
         shader->set_mat4("model", model);
 
-        shader->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
         shader->set_vec3("viewPos", graphics->camera()->Position);
+    }
 
-        // light properties
-        shader->set_vec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-        shader->set_vec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-        shader->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+    void MainController::draw_airplane(bool day) {
+        //Model
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+        engine::resources::Model *airplane = resources->model("Airplane"); //taken from congig.json
+        if (day) {
+            //Shader
+            engine::resources::Shader *shaderDir = resources->shader("directional_light");
+            day_and_night(shaderDir, graphics);
 
-        // material properties
-        shader->set_float("material.shininess", 32.0f);
+            shaderDir->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 
-        airplane->draw(shader);
+            // light properties
+            shaderDir->set_vec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+            shaderDir->set_vec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+            shaderDir->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+            // material properties
+            shaderDir->set_float("material.shininess", 32.0f);
+
+            airplane->draw(shaderDir);
+        } else {
+            //Shader
+            engine::resources::Shader *shaderSpot = resources->shader("spot_light");
+            day_and_night(shaderSpot, graphics);
+
+            shaderSpot->set_vec3("light.position", graphics->camera()->Position);
+            shaderSpot->set_vec3("light.direction", graphics->camera()->Front);
+            shaderSpot->set_float("light.cutOff", glm::cos(glm::radians(12.5f)));
+
+            // light properties
+            shaderSpot->set_vec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+            // we configure the diffuse intensity slightly higher; the right lighting conditions differ with each lighting method and environment.
+            // each environment and lighting type requires some tweaking to get the best out of your environment.
+            shaderSpot->set_vec3("light.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+            shaderSpot->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+            shaderSpot->set_float("light.constant", 1.0f);
+            shaderSpot->set_float("light.linear", 0.09f);
+            shaderSpot->set_float("light.quadratic", 0.032f);
+
+            // material properties
+            shaderSpot->set_float("material.shininess", 32.0f);
+
+            airplane->draw(shaderSpot);
+        }
     }
 
     void MainController::update_camera() {
@@ -110,8 +141,14 @@ namespace app {
         graphics->draw_skybox(shader, skybox);
     }
 
+    bool day = true;
+
     void MainController::draw() {
-        draw_airplane();
+        auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+        if (platform->key(engine::platform::KEY_F3).state() == engine::platform::Key::State::JustPressed) {
+            day = !day;
+        }
+        draw_airplane(day);
         draw_skybox();
     }
 

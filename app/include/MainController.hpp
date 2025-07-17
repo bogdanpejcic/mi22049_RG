@@ -6,6 +6,9 @@
 #define MAINCONTROLLER_HPP
 #include <engine/core/Controller.hpp>
 
+#include "engine/graphics/GraphicsController.hpp"
+#include "engine/resources/Shader.hpp"
+
 namespace app {
     class MainController : public engine::core::Controller {
         void initialize() override;
@@ -18,7 +21,9 @@ namespace app {
     private:
         void begin_draw() override; //happens before draw
 
-        void draw_airplane();
+        void day_and_night(engine::resources::Shader *shader, engine::graphics::GraphicsController *graphics);
+
+        void draw_airplane(bool day);
 
         void update_camera();
 
