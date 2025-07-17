@@ -44,9 +44,11 @@ namespace app {
         auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
         engine::resources::Model *airplane = resources->model("Airplane"); //taken from congig.json
         //Shader
-        engine::resources::Shader *shader = resources->shader("basic");
+        engine::resources::Shader *shader = resources->shader("directional_light");
 
         shader->use();
+        shader->set_int("material.diffuse", 0);
+        shader->set_int("material.specular", 1);
         shader->set_mat4("projection", graphics->projection_matrix());
         shader->set_mat4("view", graphics->camera()->view_matrix());
 
@@ -54,6 +56,17 @@ namespace app {
         model = glm::translate(model, glm::vec3(0.0f, -0.9f, -3.0f));
         model = glm::scale(model, glm::vec3(0.3f));
         shader->set_mat4("model", model);
+
+        shader->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+        shader->set_vec3("viewPos", graphics->camera()->Position);
+
+        // light properties
+        shader->set_vec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+        shader->set_vec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+        shader->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
+        // material properties
+        shader->set_float("material.shininess", 32.0f);
 
         airplane->draw(shader);
     }
