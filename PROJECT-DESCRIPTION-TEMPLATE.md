@@ -63,4 +63,8 @@ ESC -> Terminate
 
 https://opengameart.org/content/cloudy-skyboxes-0
 
+## Fonts:
+
+https://www.jetbrains.com/lp/mono
+
 {OTHER-RESOURCES}
