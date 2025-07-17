@@ -21,6 +21,7 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KEY_F2).state() == engine::platform::Key::State::JustPressed) {
             set_enable(!is_enabled());
+            platform->set_enable_cursor(is_enabled()); //cursor appears or dissapears
         }
     }
 

@@ -30,6 +30,7 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         platform->register_platform_event_observer(std::make_unique<MainPlatformEventObserver>());
         engine::graphics::OpenGL::enable_depth_testing();
+        platform->set_enable_cursor(false); //cursor disappears
     }
 
     void MainController::begin_draw() {
