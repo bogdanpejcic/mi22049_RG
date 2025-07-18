@@ -25,13 +25,13 @@ namespace app {
 
         void day_and_night(engine::resources::Shader *shader, engine::graphics::GraphicsController *graphics);
 
-        void draw_airplane(bool day);
+        void draw_airplane();
 
         void update_camera();
 
         void poll_events() override;
 
-        void draw_skybox(bool day);
+        void draw_skybox();
 
         void draw() override;
 

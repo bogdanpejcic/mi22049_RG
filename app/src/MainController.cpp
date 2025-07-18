@@ -63,7 +63,7 @@ namespace app {
         shader->set_vec3("viewPos", graphics->camera()->Position);
     }
 
-    void MainController::draw_airplane(bool day) {
+    void MainController::draw_airplane() {
         //Model
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
@@ -93,7 +93,8 @@ namespace app {
 
             shaderSpot->set_vec3("light.position", graphics->camera()->Position);
             shaderSpot->set_vec3("light.direction", graphics->camera()->Front);
-            shaderSpot->set_float("light.cutOff", glm::cos(glm::radians(12.5f)));
+            shaderSpot->set_float("light.cutOff", glm::cos(glm::radians(7.5f)));
+            shaderSpot->set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
             // light properties
             shaderSpot->set_vec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
@@ -145,12 +146,12 @@ namespace app {
 
     void MainController::poll_events() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        if (platform->key(engine::platform::KEY_F3).state() == engine::platform::Key::State::JustPressed) {
+        if (platform->key(engine::platform::KEY_N).state() == engine::platform::Key::State::JustPressed) {
             day = !day;
         }
     }
 
-    void MainController::draw_skybox(bool day) {
+    void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
         auto skybox = resources->skybox("day");
         if (day) {
@@ -164,8 +165,8 @@ namespace app {
     }
 
     void MainController::draw() {
-        draw_airplane(day);
-        draw_skybox(day);
+        draw_airplane();
+        draw_skybox();
     }
 
     void MainController::update() {

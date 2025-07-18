@@ -7,7 +7,7 @@ the scene changes to night, along with the lighting, which switches from directi
 ## Controls
 
 F2 -> Opens GUI
-F3 -> Changes scene from day to night and changes lighting
+N -> Changes scene from day to night and changes lighting
 
 W -> Camera moves forward  
 A -> Camera moves left
