@@ -35,7 +35,8 @@ namespace app {
 
     void GuiController::poll_events() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        if (platform->key(engine::platform::KEY_F2).state() == engine::platform::Key::State::JustPressed) {
+        if (platform->key(engine::platform::KEY_F2).state() == engine::platform::Key::State::JustPressed && !
+            app::MainController::get_isPanoramaActive()) {
             set_enable(!is_enabled());
             platform->set_enable_cursor(is_enabled()); //cursor appears or dissapears
         }
@@ -64,6 +65,9 @@ namespace app {
             ImGui::Text("Night skybox loaded from: resources/skyboxes/night");
             ImGui::Text("It is nighttime. Press F3 to change to daytime.");
         }
+        ImGui::Text("Press M to return to (0,0,0) in 3 seconds.");
+        ImGui::Text("Press F2 to close the GUI and hide the cursor.");
+
         if (g_LargeFont)
             ImGui::PopFont();
         ImGui::End();

@@ -4,6 +4,7 @@
 
 #include "../include/MainController.hpp"
 #include "GuiController.hpp"
+#include "../../engine/libs/glfw/include/GLFW/glfw3.h"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
@@ -27,6 +28,19 @@ namespace app {
 
     bool day;
 
+    bool isPanoramaActive = false;
+    float panoramaStartTime = 0.0f;
+    float panoramaDuration = 3.0f;
+
+    glm::vec3 panoramaStartPos;
+    const glm::vec3 panoramaTargetPos = glm::vec3(0.0f, 0.0f, 0.0f);
+    const glm::vec3 modelTarget = glm::vec3(0.0f, -0.9f, -3.0f);
+
+
+    bool MainController::get_isPanoramaActive() {
+        return isPanoramaActive;
+    }
+
     void MainController::initialize() {
         spdlog::info("MainController initialized");
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
@@ -34,6 +48,9 @@ namespace app {
         engine::graphics::OpenGL::enable_depth_testing();
         platform->set_enable_cursor(false); //cursor disappears
         day = true;
+        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+        auto camera = graphics->camera();
+        camera->Front = glm::vec3(0.0f, 0.0f, -1.0f);
     }
 
     bool MainController::get_day() {
@@ -118,29 +135,31 @@ namespace app {
         auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
         auto camera = graphics->camera();
         float dt = platform->dt();
-        if (platform->key(engine::platform::KeyId::KEY_W).is_down()) {
-            camera->move_camera(engine::graphics::Camera::Movement::FORWARD, dt);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_A).is_down()) {
-            camera->move_camera(engine::graphics::Camera::Movement::LEFT, dt);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_S).is_down()) {
-            camera->move_camera(engine::graphics::Camera::Movement::BACKWARD, dt);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_D).is_down()) {
-            camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_RIGHT).is_down()) {
-            camera->rotate_camera(10.0f, 0.0f, true);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_LEFT).is_down()) {
-            camera->rotate_camera(-10.0f, 0.0f, true);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_UP).is_down()) {
-            camera->rotate_camera(0.0f, 10.0f, true);
-        }
-        if (platform->key(engine::platform::KeyId::KEY_DOWN).is_down()) {
-            camera->rotate_camera(-0.0f, -10.0f, true);
+        if (!isPanoramaActive) {
+            if (platform->key(engine::platform::KeyId::KEY_W).is_down()) {
+                camera->move_camera(engine::graphics::Camera::Movement::FORWARD, dt);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_A).is_down()) {
+                camera->move_camera(engine::graphics::Camera::Movement::LEFT, dt);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_S).is_down()) {
+                camera->move_camera(engine::graphics::Camera::Movement::BACKWARD, dt);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_D).is_down()) {
+                camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_RIGHT).is_down()) {
+                camera->rotate_camera(10.0f, 0.0f, true);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_LEFT).is_down()) {
+                camera->rotate_camera(-10.0f, 0.0f, true);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_UP).is_down()) {
+                camera->rotate_camera(0.0f, 10.0f, true);
+            }
+            if (platform->key(engine::platform::KeyId::KEY_DOWN).is_down()) {
+                camera->rotate_camera(-0.0f, -10.0f, true);
+            }
         }
     }
 
@@ -148,6 +167,13 @@ namespace app {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KEY_N).state() == engine::platform::Key::State::JustPressed) {
             day = !day;
+        }
+        if (platform->key(engine::platform::KEY_M).state() == engine::platform::Key::State::JustPressed) {
+            auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+            auto camera = graphics->camera();
+            isPanoramaActive = true;
+            panoramaStartTime = glfwGetTime();
+            panoramaStartPos = camera->Position;
         }
     }
 
@@ -171,6 +197,21 @@ namespace app {
 
     void MainController::update() {
         update_camera();
+        if (isPanoramaActive) {
+            float now = glfwGetTime();
+            float t = (now - panoramaStartTime) / panoramaDuration;
+            auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+            auto camera = graphics->camera();
+            if (t >= 1.0f) {
+                camera->Position = panoramaTargetPos;
+                camera->Front = glm::normalize(modelTarget - camera->Position);
+                isPanoramaActive = false;
+            } else {
+                glm::vec3 newPos = glm::mix(panoramaStartPos, panoramaTargetPos, t);
+                camera->Position = newPos;
+                camera->Front = glm::normalize(modelTarget - camera->Position);
+            }
+        }
     }
 
     void MainController::end_draw() {

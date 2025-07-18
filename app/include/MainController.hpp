@@ -18,6 +18,8 @@ namespace app {
             return "app::MainController";
         }
 
+        static bool get_isPanoramaActive();
+
         static bool get_day();;
 
     private:
