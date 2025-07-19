@@ -50,6 +50,7 @@ namespace app {
         if (g_LargeFont)
             ImGui::PushFont(g_LargeFont);
 
+        ImGui::Text("\n");
         ImGui::Text("Camera position: (%f, %f, %f)", camera->Position.x, camera->Position.y, camera->Position.z);
         ImGui::Text("(Yaw, Pitch): (%f, %f)", camera->Yaw, camera->Pitch);
         ImGui::Text("Camera front: (%f, %f, %f)", camera->Front.x, camera->Front.y, camera->Front.z);
@@ -60,13 +61,17 @@ namespace app {
 
         if (app::MainController::get_day()) {
             ImGui::Text("Day skybox loaded from: resources/skyboxes/day");
-            ImGui::Text("It is daytime. Press F3 to change to nighttime.");
+            ImGui::Text("\n");
+            ImGui::Text("It is daytime. Press N to change to nighttime.");
         } else {
             ImGui::Text("Night skybox loaded from: resources/skyboxes/night");
-            ImGui::Text("It is nighttime. Press F3 to change to daytime.");
+            ImGui::Text("\n");
+            ImGui::Text("It is nighttime. Press N to change to daytime.");
         }
         ImGui::Text("Press M to return to (0,0,0) in 3 seconds.");
+        ImGui::Text("In those 3 seconds other camera movement will be dissabled.");
         ImGui::Text("Press F2 to close the GUI and hide the cursor.");
+        ImGui::Text("That will enable camera movement by cursor.");
 
         if (g_LargeFont)
             ImGui::PopFont();

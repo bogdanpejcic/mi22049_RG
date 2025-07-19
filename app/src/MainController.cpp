@@ -205,11 +205,15 @@ namespace app {
             if (t >= 1.0f) {
                 camera->Position = panoramaTargetPos;
                 camera->Front = glm::normalize(modelTarget - camera->Position);
+                camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
+                camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
                 isPanoramaActive = false;
             } else {
                 glm::vec3 newPos = glm::mix(panoramaStartPos, panoramaTargetPos, t);
                 camera->Position = newPos;
                 camera->Front = glm::normalize(modelTarget - camera->Position);
+                camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
+                camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
             }
         }
     }
