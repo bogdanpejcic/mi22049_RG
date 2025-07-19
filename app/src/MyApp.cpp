@@ -1,7 +1,7 @@
 //
 // Created by bogi on 7/5/25.
 //
-#include "../include/MyApp.hpp"
+#include <MyApp.hpp>
 #include <spdlog/spdlog.h>
 
 #include "GuiController.hpp"

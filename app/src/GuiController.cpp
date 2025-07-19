@@ -2,7 +2,7 @@
 // Created by bogi on 7/12/25.
 //
 
-#include "../include/GuiController.hpp"
+#include <GuiController.hpp>
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -36,7 +36,7 @@ namespace app {
     void GuiController::poll_events() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
         if (platform->key(engine::platform::KEY_F2).state() == engine::platform::Key::State::JustPressed && !
-            app::MainController::get_isPanoramaActive()) {
+            app::MainController::get_is_panorama_active()) {
             set_enable(!is_enabled());
             platform->set_enable_cursor(is_enabled()); //cursor appears or dissapears
         }

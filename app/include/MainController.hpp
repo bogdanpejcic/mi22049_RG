@@ -18,7 +18,7 @@ namespace app {
             return "app::MainController";
         }
 
-        static bool get_isPanoramaActive();
+        static bool get_is_panorama_active();
 
         static bool get_day();;
 
@@ -42,6 +42,8 @@ namespace app {
         void end_draw() override; //happens after draw
 
         bool loop() override;
+
+        engine::graphics::Camera *get_camera();
     };
 } // app
 

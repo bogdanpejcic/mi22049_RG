@@ -154,6 +154,10 @@ namespace engine::platform {
         }
     }
 
+    double PlatformController::glfw_get_time() {
+        return glfwGetTime();
+    }
+
     std::string_view Key::name() {
         return g_engine_key_to_string[m_key];
     }

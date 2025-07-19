@@ -130,8 +130,10 @@ public:
 
     void _platform_on_mouse_button(int button, int action);
 
-private:
-    Key &key_ref(KeyId key);
+        double glfw_get_time();
+
+    private:
+        Key &key_ref(KeyId key);
 
     /**
     * @brief Initializes the platform layer and registers platform-specific event callbacks.

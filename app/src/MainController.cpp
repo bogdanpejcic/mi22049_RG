@@ -2,9 +2,8 @@
 // Created by bogi on 7/5/25.
 //
 
-#include "../include/MainController.hpp"
+#include <MainController.hpp>
 #include "GuiController.hpp"
-#include "../../engine/libs/glfw/include/GLFW/glfw3.h"
 #include "engine/graphics/GraphicsController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
@@ -28,17 +27,17 @@ namespace app {
 
     bool day;
 
-    bool isPanoramaActive = false;
-    float panoramaStartTime = 0.0f;
-    float panoramaDuration = 3.0f;
+    bool is_panorama_active = false;
+    float panorama_start_time = 0.0f;
+    float panorama_duration = 3.0f;
 
-    glm::vec3 panoramaStartPos;
-    const glm::vec3 panoramaTargetPos = glm::vec3(0.0f, 0.0f, 0.0f);
-    const glm::vec3 modelTarget = glm::vec3(0.0f, -0.9f, -3.0f);
+    glm::vec3 panorama_start_pos;
+    const glm::vec3 panorama_target_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+    const glm::vec3 model_target = glm::vec3(0.0f, -0.9f, -3.0f);
 
 
-    bool MainController::get_isPanoramaActive() {
-        return isPanoramaActive;
+    bool MainController::get_is_panorama_active() {
+        return is_panorama_active;
     }
 
     void MainController::initialize() {
@@ -48,9 +47,6 @@ namespace app {
         engine::graphics::OpenGL::enable_depth_testing();
         platform->set_enable_cursor(false); //cursor disappears
         day = true;
-        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-        auto camera = graphics->camera();
-        camera->Front = glm::vec3(0.0f, 0.0f, -1.0f);
     }
 
     bool MainController::get_day() {
@@ -104,38 +100,37 @@ namespace app {
             airplane->draw(shaderDir);
         } else {
             //Shader
-            engine::resources::Shader *shaderSpot = resources->shader("spot_light");
+            engine::resources::Shader *shader_spot = resources->shader("spot_light");
 
-            day_and_night(shaderSpot, graphics);
+            day_and_night(shader_spot, graphics);
 
-            shaderSpot->set_vec3("light.position", graphics->camera()->Position);
-            shaderSpot->set_vec3("light.direction", graphics->camera()->Front);
-            shaderSpot->set_float("light.cutOff", glm::cos(glm::radians(7.5f)));
-            shaderSpot->set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
+            shader_spot->set_vec3("light.position", graphics->camera()->Position);
+            shader_spot->set_vec3("light.direction", graphics->camera()->Front);
+            shader_spot->set_float("light.cutOff", glm::cos(glm::radians(7.5f)));
+            shader_spot->set_float("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
             // light properties
-            shaderSpot->set_vec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+            shader_spot->set_vec3("light.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
             // we configure the diffuse intensity slightly higher; the right lighting conditions differ with each lighting method and environment.
             // each environment and lighting type requires some tweaking to get the best out of your environment.
-            shaderSpot->set_vec3("light.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
-            shaderSpot->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-            shaderSpot->set_float("light.constant", 1.0f);
-            shaderSpot->set_float("light.linear", 0.09f);
-            shaderSpot->set_float("light.quadratic", 0.032f);
+            shader_spot->set_vec3("light.diffuse", glm::vec3(0.8f, 0.8f, 0.8f));
+            shader_spot->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+            shader_spot->set_float("light.constant", 1.0f);
+            shader_spot->set_float("light.linear", 0.09f);
+            shader_spot->set_float("light.quadratic", 0.032f);
 
             // material properties
-            shaderSpot->set_float("material.shininess", 32.0f);
+            shader_spot->set_float("material.shininess", 32.0f);
 
-            airplane->draw(shaderSpot);
+            airplane->draw(shader_spot);
         }
     }
 
     void MainController::update_camera() {
         auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
-        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-        auto camera = graphics->camera();
+        auto camera = get_camera();
         float dt = platform->dt();
-        if (!isPanoramaActive) {
+        if (!is_panorama_active) {
             if (platform->key(engine::platform::KeyId::KEY_W).is_down()) {
                 camera->move_camera(engine::graphics::Camera::Movement::FORWARD, dt);
             }
@@ -169,17 +164,17 @@ namespace app {
             day = !day;
         }
         if (platform->key(engine::platform::KEY_M).state() == engine::platform::Key::State::JustPressed) {
-            auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-            auto camera = graphics->camera();
-            isPanoramaActive = true;
-            panoramaStartTime = glfwGetTime();
-            panoramaStartPos = camera->Position;
+            auto camera = get_camera();
+            is_panorama_active = true;
+            panorama_start_time = engine::core::Controller::get<engine::platform::PlatformController>()->
+                    glfw_get_time();
+            panorama_start_pos = camera->Position;
         }
     }
 
     void MainController::draw_skybox() {
         auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-        auto skybox = resources->skybox("day");
+        engine::resources::Skybox *skybox;
         if (day) {
             skybox = resources->skybox("day");
         } else {
@@ -197,21 +192,21 @@ namespace app {
 
     void MainController::update() {
         update_camera();
-        if (isPanoramaActive) {
-            float now = glfwGetTime();
-            float t = (now - panoramaStartTime) / panoramaDuration;
-            auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-            auto camera = graphics->camera();
+        if (is_panorama_active) {
+            float now = engine::core::Controller::get<engine::platform::PlatformController>()->
+                    glfw_get_time();
+            float t = (now - panorama_start_time) / panorama_duration;
+            auto camera = get_camera();
             if (t >= 1.0f) {
-                camera->Position = panoramaTargetPos;
-                camera->Front = glm::normalize(modelTarget - camera->Position);
+                camera->Position = panorama_target_pos;
+                camera->Front = glm::normalize(model_target - camera->Position);
                 camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
                 camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
-                isPanoramaActive = false;
+                is_panorama_active = false;
             } else {
-                glm::vec3 newPos = glm::mix(panoramaStartPos, panoramaTargetPos, t);
+                glm::vec3 newPos = glm::mix(panorama_start_pos, panorama_target_pos, t);
                 camera->Position = newPos;
-                camera->Front = glm::normalize(modelTarget - camera->Position);
+                camera->Front = glm::normalize(model_target - camera->Position);
                 camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
                 camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
             }
@@ -230,5 +225,10 @@ namespace app {
             return false;
         }
         return true;
+    }
+
+    engine::graphics::Camera *MainController::get_camera() {
+        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+        return graphics->camera();
     }
 } // app
