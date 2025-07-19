@@ -169,6 +169,7 @@ namespace app {
             panorama_start_time = engine::core::Controller::get<engine::platform::PlatformController>()->
                     glfw_get_time();
             panorama_start_pos = camera->Position;
+            engine::core::Controller::get<engine::platform::PlatformController>()->first_mouse = true;
         }
     }
 
@@ -203,6 +204,7 @@ namespace app {
                 camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
                 camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
                 is_panorama_active = false;
+                engine::core::Controller::get<engine::platform::PlatformController>()->first_mouse = true;
             } else {
                 glm::vec3 newPos = glm::mix(panorama_start_pos, panorama_target_pos, t);
                 camera->Position = newPos;

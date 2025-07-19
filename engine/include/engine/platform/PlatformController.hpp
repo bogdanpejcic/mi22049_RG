@@ -132,6 +132,8 @@ public:
 
         double glfw_get_time();
 
+        bool first_mouse;
+
     private:
         Key &key_ref(KeyId key);
 

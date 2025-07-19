@@ -3,6 +3,9 @@
     "models": {
       "Airplane": {
         "path": "airplane/Harrier.obj"
+      },
+      "Jet": {
+        "path": "jet/source/GripenE.obj"
       }
     }
   },

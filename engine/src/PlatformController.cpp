@@ -194,13 +194,28 @@ namespace engine::platform {
         m_platform_event_observers.emplace_back(std::move(observer));
     }
 
+    bool first_mouse = true;
+
     void PlatformController::_platform_on_mouse(double x, double y) {
-        double last_x = g_mouse_position.x;
-        double last_y = g_mouse_position.y;
-        g_mouse_position.dx = x - last_x;
-        g_mouse_position.dy = last_y - y; // because in glfw the top left corner is the (0,0)
+        static double last_x = x;
+        static double last_y = y;
+
+        if (first_mouse) {
+            last_x = x;
+            last_y = y;
+            first_mouse = false;
+            g_mouse_position.dx = 0.0;
+            g_mouse_position.dy = 0.0;
+        } else {
+            g_mouse_position.dx = x - last_x;
+            g_mouse_position.dy = last_y - y;
+            last_x = x;
+            last_y = y;
+        }
+
         g_mouse_position.x = x;
         g_mouse_position.y = y;
+
         for (auto &observer: m_platform_event_observers) {
             observer->on_mouse_move(g_mouse_position);
         }
