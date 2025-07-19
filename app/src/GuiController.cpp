@@ -12,7 +12,7 @@
 #include "engine/resources/ResourcesController.hpp"
 
 namespace app {
-    ImFont *g_LargeFont = nullptr;
+    ImFont *g_large_font = nullptr;
 
     void GuiController::initialize() {
         set_enable(false);
@@ -21,9 +21,9 @@ namespace app {
         ImGuiIO &io = ImGui::GetIO();
 
         // Load font
-        g_LargeFont = io.Fonts->AddFontFromFileTTF("resources/fonts/JetBrainsMono/JetBrainsMonoNL-SemiBoldItalic.ttf",
-                                                   26.0f);
-        if (!g_LargeFont) {
+        g_large_font = io.Fonts->AddFontFromFileTTF("resources/fonts/JetBrainsMono/JetBrainsMonoNL-SemiBoldItalic.ttf",
+                                                    26.0f);
+        if (!g_large_font) {
             engine::util::EngineError::type_string(engine::util::EngineError::Type::FileNotFound);
         }
         ImGui_ImplOpenGL3_CreateFontsTexture();
@@ -47,8 +47,8 @@ namespace app {
         auto camera = graphics->camera();
         graphics->begin_gui();
         ImGui::Begin("Info");
-        if (g_LargeFont)
-            ImGui::PushFont(g_LargeFont);
+        if (g_large_font)
+            ImGui::PushFont(g_large_font);
 
         ImGui::Text("\n");
         ImGui::Text("Camera position: (%f, %f, %f)", camera->Position.x, camera->Position.y, camera->Position.z);
@@ -73,7 +73,7 @@ namespace app {
         ImGui::Text("Press F2 to close the GUI and hide the cursor.");
         ImGui::Text("That will enable camera movement by cursor.");
 
-        if (g_LargeFont)
+        if (g_large_font)
             ImGui::PopFont();
         ImGui::End();
         graphics->end_gui();
