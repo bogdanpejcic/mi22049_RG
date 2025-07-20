@@ -74,6 +74,9 @@ namespace app {
         shader->set_mat4("model", model);
 
         shader->set_vec3("viewPos", graphics->camera()->Position);
+
+        // material properties
+        shader->set_float("material.shininess", 32.0f);
     }
 
     void MainController::draw_airplane() {
@@ -83,21 +86,18 @@ namespace app {
         engine::resources::Model *airplane = resources->model("Airplane"); //taken from congig.json
         if (day) {
             //Shader
-            engine::resources::Shader *shaderDir = resources->shader("directional_light");
+            engine::resources::Shader *shader_dir = resources->shader("directional_light");
 
-            day_and_night(shaderDir, graphics);
+            day_and_night(shader_dir, graphics);
 
-            shaderDir->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
+            shader_dir->set_vec3("light.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
 
             // light properties
-            shaderDir->set_vec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-            shaderDir->set_vec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-            shaderDir->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+            shader_dir->set_vec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+            shader_dir->set_vec3("light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+            shader_dir->set_vec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
-            // material properties
-            shaderDir->set_float("material.shininess", 32.0f);
-
-            airplane->draw(shaderDir);
+            airplane->draw(shader_dir);
         } else {
             //Shader
             engine::resources::Shader *shader_spot = resources->shader("spot_light");
@@ -118,9 +118,6 @@ namespace app {
             shader_spot->set_float("light.constant", 1.0f);
             shader_spot->set_float("light.linear", 0.09f);
             shader_spot->set_float("light.quadratic", 0.032f);
-
-            // material properties
-            shader_spot->set_float("material.shininess", 32.0f);
 
             airplane->draw(shader_spot);
         }
@@ -186,9 +183,13 @@ namespace app {
         graphics->draw_skybox(shader, skybox);
     }
 
+    void MainController::draw_bird_instances() {
+    }
+
     void MainController::draw() {
         draw_airplane();
         draw_skybox();
+        draw_bird_instances();
     }
 
     void MainController::update() {

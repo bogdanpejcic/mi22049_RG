@@ -35,6 +35,8 @@ namespace app {
 
         void draw_skybox();
 
+        void draw_bird_instances();
+
         void draw() override;
 
         void update() override;
