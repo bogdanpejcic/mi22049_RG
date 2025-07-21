@@ -3,6 +3,9 @@
     "models": {
       "Airplane": {
         "path": "airplane/Harrier.obj"
+      },
+      "bird": {
+        "path": "simple-bird/source/Bird_simple.obj"
       }
     }
   },

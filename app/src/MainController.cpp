@@ -5,6 +5,7 @@
 #include <MainController.hpp>
 #include "GuiController.hpp"
 #include "engine/graphics/GraphicsController.hpp"
+#include "engine/graphics/InstancingController.hpp"
 #include "engine/graphics/OpenGL.hpp"
 #include "engine/platform/PlatformController.hpp"
 #include "engine/resources/ResourcesController.hpp"
@@ -47,6 +48,11 @@ namespace app {
         engine::graphics::OpenGL::enable_depth_testing();
         platform->set_enable_cursor(false); //cursor disappears
         day = true;
+        auto instances = engine::graphics::GraphicsController::get<engine::graphics::InstancingController>();
+
+        instances->generate_model_transformation_matrices();
+
+        instances->configure_instanced_array();
     }
 
     bool MainController::get_day() {
@@ -184,6 +190,14 @@ namespace app {
     }
 
     void MainController::draw_bird_instances() {
+        auto instances = engine::graphics::GraphicsController::get<engine::graphics::InstancingController>();
+
+        auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+        engine::resources::Model *bird = resources->model("bird");
+        instances->set_transformation_matrices(bird);
+
+        engine::resources::Shader *instancing_shader = resources->shader("instancing");
+        instances->draw_instances(instancing_shader, bird);
     }
 
     void MainController::draw() {
