@@ -65,6 +65,7 @@ namespace app {
         engine::graphics::OpenGL::clear_buffers();
     }
 
+    // Shared calls for both
     void MainController::day_and_night(engine::resources::Shader *shader,
                                        engine::graphics::GraphicsController *graphics) {
         shader->use();

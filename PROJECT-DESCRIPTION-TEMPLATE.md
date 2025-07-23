@@ -1,4 +1,4 @@
-# {NAME-OF-THE-PROJECT}
+Airplain flying through a flock of birds
 
 49/2022 - Bogdan Pejčić
 Airplane is flying in daytime conditions. After pressing N on the keyboard,
@@ -6,13 +6,13 @@ the scene changes to night, along with the lighting, which switches from directi
 After pressing the M key, the camera turns to face the model and travels over 3 seconds to
 a position in front of it, maintaining its focus on the model throughout the journey. During this movement,
 other camera controls and GUI interactions are disabled.
-If you want to use your cursor (e.g., to enter full screen), open the GUI.
+If you want to use your cursor (e.g., to enter full screen), open the GUI by pressing F2.
 
 ## Controls
 
 F2 -> Opens GUI
 N -> Changes scene from day to night and changes lighting
-M -> Returns camera to starting position in 2 seconds
+M -> Returns camera to starting position in 3 seconds
 
 W -> Camera moves forward  
 A -> Camera moves left
@@ -25,8 +25,6 @@ KEY_LEFT -> Camera turns left
 KEY_RIGHT -> Camera turns right
 
 ESC -> Terminate
-...  
-{BUTTONN} -> {ACTIONN}
 
 ## Features
 
@@ -40,7 +38,7 @@ ESC -> Terminate
 ### Group A:
 
 [ ] Frame-buffers with post-processing   
-[ ] Instancing  
+[ YES ] Instancing - bird flock
 [ ] Off-screen Anti-Aliasing  
 [ ] Parallax Mapping
 
@@ -72,5 +70,3 @@ https://opengameart.org/content/cloudy-skyboxes-0
 ## Fonts:
 
 https://www.jetbrains.com/lp/mono
-
-{OTHER-RESOURCES}
