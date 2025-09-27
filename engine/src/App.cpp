@@ -9,6 +9,8 @@
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/util/Utils.hpp>
 
+#include "engine/graphics/InstancingController.hpp"
+
 namespace engine::core {
 int App::run(int argc, char **argv) {
     try {
@@ -37,11 +39,13 @@ void App::engine_setup(int argc, char **argv) {
     auto platform = register_controller<platform::PlatformController>();
     auto graphics = register_controller<graphics::GraphicsController>();
     auto resources = register_controller<resources::ResourcesController>();
+    auto instances = register_controller<graphics::InstancingController>();
     auto end = register_controller<EngineControllersEnd>();
     begin->before(platform);
     platform->before(graphics);
     graphics->before(resources);
-    resources->before(end);
+    resources->before(instances);
+    instances->before(end);
 }
 
 void App::initialize() {
