@@ -32,11 +32,6 @@ namespace app {
     float panorama_start_time = 0.0f;
     float panorama_duration = 3.0f;
 
-    glm::vec3 panorama_start_pos;
-    const glm::vec3 panorama_target_pos = glm::vec3(0.0f, 0.0f, 0.0f);
-    const glm::vec3 model_target = glm::vec3(0.0f, -0.9f, -3.0f);
-
-
     bool MainController::get_is_panorama_active() {
         return is_panorama_active;
     }

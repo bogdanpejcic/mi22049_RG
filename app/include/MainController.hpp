@@ -46,6 +46,10 @@ namespace app {
         bool loop() override;
 
         engine::graphics::Camera *get_camera();
+
+        glm::vec3 panorama_start_pos;
+        glm::vec3 panorama_target_pos = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 model_target = glm::vec3(0.0f, -0.9f, -3.0f);
     };
 } // app
 
