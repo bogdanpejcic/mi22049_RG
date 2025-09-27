@@ -77,23 +77,7 @@ namespace engine {
         }
     }
 
-    void graphics::InstancingController::configure_transformation_matrices(resources::Shader *shader) {
-        auto graphics = engine::core::Controller::get<GraphicsController>();
-        shader->use();
-        shader->set_int("material.diffuse", 0);
-        shader->set_int("material.specular", 1);
-
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-    }
-
-    void graphics::InstancingController::draw_instances(const resources::Shader *shader,
-                                                        const resources::Model *model) {
-        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
-        shader->use();
-        shader->set_mat4("projection", graphics->projection_matrix());
-        shader->set_mat4("view", graphics->camera()->view_matrix());
-        shader->set_int("texture_diffuse1", 0);
+    void graphics::InstancingController::draw_instances(const resources::Model *model) {
         for (unsigned int i = 0; i < model->meshes().size(); i++) {
             auto &mesh = model->meshes()[i];
 

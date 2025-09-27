@@ -193,7 +193,12 @@ namespace app {
         instances->set_transformation_matrices(bird);
 
         engine::resources::Shader *instancing_shader = resources->shader("instancing");
-        instances->draw_instances(instancing_shader, bird);
+        auto graphics = engine::graphics::GraphicsController::get<engine::graphics::GraphicsController>();
+        instancing_shader->use();
+        instancing_shader->set_mat4("projection", graphics->projection_matrix());
+        instancing_shader->set_mat4("view", graphics->camera()->view_matrix());
+        instancing_shader->set_int("texture_diffuse1", 0);
+        instances->draw_instances(bird);
     }
 
     void MainController::draw() {

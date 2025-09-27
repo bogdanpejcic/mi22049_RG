@@ -25,9 +25,7 @@ namespace engine::graphics {
 
         void set_transformation_matrices(resources::Model *model);
 
-        void configure_transformation_matrices(resources::Shader *shader);
-
-        void draw_instances(const resources::Shader *shader, const resources::Model *model);
+        void draw_instances(const resources::Model *model);
     }; // engine
 }
 #endif //INSTANCINGCONTROLLER_HPP
