@@ -29,7 +29,7 @@ namespace app {
     bool day;
 
     bool is_panorama_active = false;
-    float panorama_start_time = 0.0f;
+    engine::platform::FrameTime panorama_start_time;
     float panorama_duration = 3.0f;
 
     bool MainController::get_is_panorama_active() {
@@ -166,7 +166,7 @@ namespace app {
             auto camera = get_camera();
             is_panorama_active = true;
             panorama_start_time = engine::core::Controller::get<engine::platform::PlatformController>()->
-                    glfw_get_time();
+                    frame_time();
             panorama_start_pos = camera->Position;
             engine::core::Controller::get<engine::platform::PlatformController>()->first_mouse = true;
         }
@@ -210,9 +210,9 @@ namespace app {
     void MainController::update() {
         update_camera();
         if (is_panorama_active) {
-            float now = engine::core::Controller::get<engine::platform::PlatformController>()->
-                    glfw_get_time();
-            float t = (now - panorama_start_time) / panorama_duration;
+            engine::platform::FrameTime now = engine::core::Controller::get<engine::platform::PlatformController>()->
+                    frame_time();
+            float t = (now.current - panorama_start_time.current) / panorama_duration;
             auto camera = get_camera();
             if (t >= 1.0f) {
                 camera->Position = panorama_target_pos;
