@@ -167,7 +167,7 @@ namespace app {
             is_panorama_active = true;
             panorama_start_time = engine::core::Controller::get<engine::platform::PlatformController>()->
                     frame_time();
-            panorama_start_pos = camera->Position;
+            m_panorama_start_pos = camera->Position;
             engine::core::Controller::get<engine::platform::PlatformController>()->first_mouse = true;
         }
     }
@@ -215,16 +215,16 @@ namespace app {
             float t = (now.current - panorama_start_time.current) / panorama_duration;
             auto camera = get_camera();
             if (t >= 1.0f) {
-                camera->Position = panorama_target_pos;
-                camera->Front = glm::normalize(model_target - camera->Position);
+                camera->Position = m_panorama_target_pos;
+                camera->Front = glm::normalize(m_model_target - camera->Position);
                 camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
                 camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
                 is_panorama_active = false;
                 engine::core::Controller::get<engine::platform::PlatformController>()->first_mouse = true;
             } else {
-                glm::vec3 newPos = glm::mix(panorama_start_pos, panorama_target_pos, t);
+                glm::vec3 newPos = glm::mix(m_panorama_start_pos, m_panorama_target_pos, t);
                 camera->Position = newPos;
-                camera->Front = glm::normalize(model_target - camera->Position);
+                camera->Front = glm::normalize(m_model_target - camera->Position);
                 camera->Right = glm::normalize(glm::cross(camera->Front, glm::vec3(0.0f, 1.0f, 0.0f)));
                 camera->Up = glm::normalize(glm::cross(camera->Right, camera->Front));
             }

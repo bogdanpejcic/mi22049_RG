@@ -1,7 +1,7 @@
 //
 // Created by bogi on 7/20/25.
 //
-
+#include <random>
 #include <cmath>
 #include <engine/graphics/InstancingController.hpp>
 
@@ -17,6 +17,13 @@ namespace engine {
         return "InstancingController";
     }
 
+    inline float random_float() {
+        static std::random_device rd;
+        static std::mt19937 gen(rd());
+        static std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+        return dist(gen);
+    }
+
     void graphics::InstancingController::generate_model_transformation_matrices() {
         amount = 1000;
         model_matrices = new glm::mat4[amount];
@@ -30,18 +37,18 @@ namespace engine {
             glm::mat4 model = glm::mat4(1.0f);
 
             // Ellipsoidal distribution
-            float x = (rand() / (float) RAND_MAX - 0.5f) * spread; // left-right
-            float y = (rand() / (float) RAND_MAX - 0.5f) * height; // up-down
-            float z = -(rand() / (float) RAND_MAX) * depth; // forward
+            float x = (random_float() - 0.5f) * spread; // left-right
+            float y = (random_float() - 0.5f) * height; // up-down
+            float z = -random_float() * depth; // forward
 
             model = glm::translate(model, glm::vec3(x, y, z));
 
             // Random scale
-            float scale = 0.08f + ((rand() % 10) / 100.0f); // 0.08 - 0.18
+            float scale = 0.08f + random_float() * 0.10f; // 0.08 - 0.18
             model = glm::scale(model, glm::vec3(scale));
 
             // Random rotation
-            float rotAngle = (rand() % 360);
+            float rotAngle = random_float() * 360.0f;
             model = glm::rotate(model, glm::radians(rotAngle), glm::vec3(0.1f, 1.0f, 0.1f));
 
             model_matrices[i] = model;
