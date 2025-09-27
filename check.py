@@ -18,24 +18,10 @@ Exit Codes:
 import sys
 import os
 import re
-from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 
-
-class StatusCodes(Enum):
-    FAILED = 0
-    SUCCESS = 0
-
-
-try:
-    from clang.cindex import Index, CursorKind, TypeKind, TranslationUnit
-except ImportError:
-    print(
-        "Package 'clang' is not installed. Please run: `pip install libclang` to install it. If your system doesn't allow "
-        "system wide libclang installation, please run ./setup.sh to setup python-venv and libclang inside your project and then rerun CMake.")
-    # Optionally handle the missing package (e.g., install it, exit, etc.)
-    sys.exit(StatusCodes.FAILED.value)
+from clang.cindex import Index, CursorKind, TypeKind, TranslationUnit
 
 
 class BColors:
@@ -108,7 +94,7 @@ class DirectUseOfGLADLibrary(SingleLineRule):
         super().__init__("Direct use of gl functions is not allowed in the app module.",
                          "Please encapsulate the usage of gl functions inside the engine/graphics module.",
                          "See engine/graphics/GraphicsController.cpp for an example of how to call OpenGL functions from the app module.\n\t\tCalls to the opengl library should be contained within the OpenGL.cpp file or at least the engine/graphics module.",
-                         r"[ ]*#[ ]*include[ ]*[<\"].*\/glad.h*[\">]")
+                         f"[ ]*#[ ]*include[ ]*[<\"].*\/glad.h*[\">]")
 
 
 class DirectUseOfGLFWLibrary(SingleLineRule):
@@ -116,7 +102,7 @@ class DirectUseOfGLFWLibrary(SingleLineRule):
         super().__init__("Direct use of `glfw` library is not allowed in the app module.",
                          "Please encapsulate the usage of glfw inside the engine/platform module.",
                          "Please see engine/platform/PlatformController.cpp for an example of how to use the glfw library.",
-                         r"[ ]*#[ ]*include[ ]*[<\"].*\/glfw3.h*[\">]")
+                         f"[ ]*#[ ]*include[ ]*[<\"].*\/glfw3.h*[\">]")
 
 
 class DirectUseOfASSIMPLibrary(SingleLineRule):
@@ -124,7 +110,7 @@ class DirectUseOfASSIMPLibrary(SingleLineRule):
         super().__init__("Direct use of `assimp` library is not allowed in the app module.",
                          "Please encapsulate the usage of assimp inside the engine/resources module",
                          "See engine/resources/ResourcesController.cpp for an example of how the assimp library is used in the project.",
-                         r"[ ]*#[ ]*include[ ]*[<\"]assimp\/.*[\">]")
+                         f"[ ]*#[ ]*include[ ]*[<\"]assimp\/.*[\">]")
 
 
 class UseOfRelativePathInIncludeDirective(SingleLineRule):
@@ -133,7 +119,7 @@ class UseOfRelativePathInIncludeDirective(SingleLineRule):
             "Relative paths (../) in #include directives are not allowed as they bypass the build system's project management.",
             "Use direct include directives: #include <subproject/lib/module/MyFile.hpp>.",
             "If after the applied fix the compiler reports a 'file not found', you may be trying to access a part of the project that is restricted from the current file.",
-            r"[ ]*#[ ]*include[ ]*[<\"]([.][.][/])+.*[\">]")
+            f"[ ]*#[ ]*include[ ]*[<\"]([.][.][/])+.*[\">]")
 
 
 class NamingConvention(Rule):
@@ -404,7 +390,6 @@ class Verifier:
 
 if __name__ == "__main__":
     path = Path(sys.argv[1])
-    print(f'-- [PYTHON] Running check on {path}')
     assert path.exists()
     verifier = Verifier(path)
     violations = verifier.check_for_violations()
@@ -416,6 +401,6 @@ if __name__ == "__main__":
         )
         for v in violations:
             print(v)
-        sys.exit(StatusCodes.FAILED.value)
+        sys.exit(0)
     else:
-        sys.exit(StatusCodes.SUCCESS.value)
+        sys.exit(0)

@@ -1,17 +1,11 @@
 {
   "resources": {
     "models": {
-      "Airplane": {
-        "path": "airplane/Harrier.obj"
-      },
-      "bird": {
-        "path": "simple-bird/source/Bird_simple.obj"
-      }
     }
   },
   "window": {
-    "height": 1200,
+    "height": 600,
     "title": "Hello, window!",
-    "width": 1600
+    "width": 800
   }
 }
